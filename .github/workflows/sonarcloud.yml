@@ -16,8 +16,16 @@ jobs:
         with:
           fetch-depth: 0 # SonarCloud needs full history for accurate blame/new-code detection
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: SonarQube Cloud Scan
+        uses: SonarSource/sonarqube-scan-action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+        # sonarcloud-github-action is deprecated: it bundles an old scanner CLI that
+        # requires a Java version SonarCloud has since stopped supporting, and it
+        # always injects `-Dsonar.projectKey=` / `-Dsonar.organization=` from its own
+        # (unset) `with:` inputs — an explicit-but-empty CLI flag overrides whatever
+        # sonar-project.properties says, so those two values got silently blanked out.
+        # sonarqube-scan-action auto-provisions a compatible JRE and reads
+        # sonar-project.properties directly, without that override behaviour.
