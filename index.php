@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/includes/bootstrap.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'pages/head.php'; ?>
@@ -144,7 +147,7 @@
 
 
           <form action="#" class="p-5 bg-white" method="post">
-
+            <?php echo csrf_field(); ?>
 
             <div class="row form-group">
               <div class="col-md-12 mb-3 mb-md-0">

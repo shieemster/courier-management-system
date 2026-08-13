@@ -1,10 +1,18 @@
 <?php
+
+/**
+ * Fix for V-01 (SQL Injection): prepared statements with bound parameters.
+ * Fix for V-04 (Plaintext Password Storage): password_hash() (bcrypt) before
+ * any password is written to the database.
+ */
+
 function insertImagetoGallery($img)
 {
 	include 'connection.php';
 
-	$sql = "INSERT INTO gallery(gallery_image) VALUES('$img')";
-	return mysqli_query($con, $sql);
+	$stmt = mysqli_prepare($con, "INSERT INTO gallery(gallery_image) VALUES(?)");
+	mysqli_stmt_bind_param($stmt, 's', $img);
+	return mysqli_stmt_execute($stmt);
 }
 
 function addBranch($data)
@@ -12,8 +20,9 @@ function addBranch($data)
 	include 'connection.php';
 
 	$branch_name = $data['branch_name'];
-	$sql = "INSERT INTO branch(branch_name, is_deleted) VALUES('$branch_name', 0)";
-	return mysqli_query($con, $sql);
+	$stmt = mysqli_prepare($con, "INSERT INTO branch(branch_name, is_deleted) VALUES(?, 0)");
+	mysqli_stmt_bind_param($stmt, 's', $branch_name);
+	return mysqli_stmt_execute($stmt);
 }
 
 function addArea($data)
@@ -22,13 +31,12 @@ function addArea($data)
 
 	$area_name = $data['area_name'];
 
-
 	$count = checkAreaByName($area_name);
 
 	if ($count == 0) {
-
-		$sql = "INSERT INTO area(area_name, is_deleted) VALUES('$area_name', 0)";
-		return mysqli_query($con, $sql);
+		$stmt = mysqli_prepare($con, "INSERT INTO area(area_name, is_deleted) VALUES(?, 0)");
+		mysqli_stmt_bind_param($stmt, 's', $area_name);
+		return mysqli_stmt_execute($stmt);
 	} else {
 		echo json_encode($count);
 	}
@@ -45,9 +53,9 @@ function addPrice($data)
 	$count = checkPrice($start_area, $end_area);
 
 	if ($count == 0) {
-
-		$sql = "INSERT INTO price_table(start_area, end_area, price ,is_deleted, date_updated) VALUES('$start_area', '$end_area', '$price', 0 , now())";
-		return mysqli_query($con, $sql);
+		$stmt = mysqli_prepare($con, "INSERT INTO price_table(start_area, end_area, price, is_deleted, date_updated) VALUES(?, ?, ?, 0, now())");
+		mysqli_stmt_bind_param($stmt, 'sss', $start_area, $end_area, $price);
+		return mysqli_stmt_execute($stmt);
 	} else {
 		echo json_encode($count);
 	}
@@ -67,9 +75,22 @@ function addRequest($data)
 	$red_address = $data['red_address'];
 	$res_name = $data['res_name'];
 
-	$sql = "INSERT INTO request(customer_id, sender_phone, weight, send_location, end_location, total_fee, res_phone, red_address, is_deleted, date_updated, tracking_status, res_name) 
-	VALUES('$customer_id', '$sender_phone', '$weight', '$send_location', '$end_location', '$total_fee', '$res_phone', '$red_address', 0 , now(), 1 , '$res_name')";
-	return mysqli_query($con, $sql);
+	$stmt = mysqli_prepare($con, "INSERT INTO request(customer_id, sender_phone, weight, send_location, end_location, total_fee, res_phone, red_address, is_deleted, date_updated, tracking_status, res_name)
+		VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0, now(), 1, ?)");
+	mysqli_stmt_bind_param(
+		$stmt,
+		'ssssssss' . 's',
+		$customer_id,
+		$sender_phone,
+		$weight,
+		$send_location,
+		$end_location,
+		$total_fee,
+		$res_phone,
+		$red_address,
+		$res_name
+	);
+	return mysqli_stmt_execute($stmt);
 }
 
 function addEmployee($data)
@@ -82,16 +103,15 @@ function addEmployee($data)
 	$nic = $data['nic'];
 	$address = $data['address'];
 	$gender = $data['gender'];
-	$password = $data['password'];
+	$password = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
 	$branch_id = $data['branch_id'];
-
 
 	$count = checkemployeetByEmail($email);
 
 	if ($count == 0) {
-
-		$sql = "INSERT INTO employee(name, email, phone, nic, address, gender, password ,is_deleted, branch_id) VALUES('$name', '$email', '$phone', '$nic', '$address', '$gender', '$password', 0 , '$branch_id')";
-		return mysqli_query($con, $sql);
+		$stmt = mysqli_prepare($con, "INSERT INTO employee(name, email, phone, nic, address, gender, password, is_deleted, branch_id) VALUES(?, ?, ?, ?, ?, ?, ?, 0, ?)");
+		mysqli_stmt_bind_param($stmt, 'sssssssi', $name, $email, $phone, $nic, $address, $gender, $password, $branch_id);
+		return mysqli_stmt_execute($stmt);
 	} else {
 		echo json_encode($count);
 	}
@@ -108,9 +128,9 @@ function addMessage($data)
 	$subject = $data['subject'];
 	$message = $data['message'];
 
-
-	$sql = "INSERT INTO contact(name, email, subject, message, date_updated) VALUES('$name', '$email', '$subject', '$message', now())";
-	return mysqli_query($con, $sql);
+	$stmt = mysqli_prepare($con, "INSERT INTO contact(name, email, subject, message, date_updated) VALUES(?, ?, ?, ?, now())");
+	mysqli_stmt_bind_param($stmt, 'ssss', $name, $email, $subject, $message);
+	return mysqli_stmt_execute($stmt);
 }
 
 
@@ -124,8 +144,9 @@ function createCustomer($data)
 	$nic = $data['nic'];
 	$address = $data['address'];
 	$gender = $data['gender'];
-	$password = $data['password'];
+	$password = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
 
-	$sql = "INSERT INTO customer(name, email, phone, nic, address, gender, password, is_deleted) VALUES('$name', '$email', '$phone', '$nic', '$address', '$gender', '$password', 0 )";
-	return mysqli_query($con, $sql);
+	$stmt = mysqli_prepare($con, "INSERT INTO customer(name, email, phone, nic, address, gender, password, is_deleted) VALUES(?, ?, ?, ?, ?, ?, ?, 0)");
+	mysqli_stmt_bind_param($stmt, 'sssssss', $name, $email, $phone, $nic, $address, $gender, $password);
+	return mysqli_stmt_execute($stmt);
 }

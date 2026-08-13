@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../includes/bootstrap.php';
+require_staff_login('login.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 

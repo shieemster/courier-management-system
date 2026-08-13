@@ -1,3 +1,14 @@
+<?php
+require_once __DIR__ . '/../includes/bootstrap.php';
+if (isset($_SESSION['admin'])) {
+    header('Location: index.php');
+    exit();
+}
+if (isset($_SESSION['customer'])) {
+    header('Location: ../index.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +22,7 @@
                 <div class="col-md-5 p-5 shadow-sm border rounded-5 border-primary bg-white">
                     <h2 class="text-center mb-4 text-primary">Royal Express - Sign Up</h2>
                     <form>
+                        <?php echo csrf_field(); ?>
                         <div class="mb-3">
                             <label for="name" class="form-label">Full Name</label>
                             <input type="name" class="form-control border border-primary" name="name" id="name" aria-describedby="nameHelp">

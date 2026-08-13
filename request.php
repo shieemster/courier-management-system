@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/includes/bootstrap.php';
+require_customer_login();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'pages/head.php'; ?>
@@ -88,7 +92,7 @@
 
 
                     <form action="#" class="p-5 bg-white" method="post">
-
+                        <?php echo csrf_field(); ?>
 
                         <h4>Sending Details</h4>
                         <div class="row mt-3">

@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../includes/bootstrap.php';
+require_staff_login('login.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -138,12 +142,12 @@
                                 <div class="card-body row">
 
                                     <div class="col"> <strong>Shipping Address:</strong>
-                                        <br><?php echo $row['name']; ?>
-                                        <br><?php echo $row['phone']; ?>
-                                        <br><?php echo $row['red_address']; ?>
+                                        <br><?php echo e($row['name']); ?>
+                                        <br><?php echo e($row['phone']); ?>
+                                        <br><?php echo e($row['red_address']); ?>
                                     </div>
                                     <div class="col"> <strong>Recever Mobile:</strong>
-                                        <br><?php echo $row['res_phone']; ?>
+                                        <br><?php echo e($row['res_phone']); ?>
                                     </div>
                                     <div class="col"> <strong>Current Status:</strong>
                                         <br>
@@ -160,23 +164,23 @@
                                         } ?>
                                     </div>
                                     <div class="col"> <strong>Requested Date:</strong>
-                                        <br><?php echo $row['date_updated']; ?>
+                                        <br><?php echo e($row['date_updated']); ?>
                                     </div>
                                 </div>
                                 <div class="card-body row">
 
                                     <div class="col"> <strong>Weight:</strong>
-                                        <br><?php echo $row['weight']; ?>
+                                        <br><?php echo e($row['weight']); ?>
                                     </div>
                                     <div class="col"> <strong>Sender Mobile:</strong>
-                                        <br><?php echo $row['sender_phone']; ?>
+                                        <br><?php echo e($row['sender_phone']); ?>
                                     </div>
                                     <div class="col"> <strong>Send Location</strong>
                                         <br>
                                         <?php
                                         $getLocation = getAllAreabyID($row['send_location']);
                                         $row2 = mysqli_fetch_assoc($getLocation);
-                                        echo $row2['area_name'];
+                                        echo e($row2['area_name']);
                                         ?>
                                     </div>
                                     <div class="col"> <strong>End Location</strong>
@@ -184,7 +188,7 @@
                                         <?php
                                         $getLocation = getAllAreabyID($row['end_location']);
                                         $row2 = mysqli_fetch_assoc($getLocation);
-                                        echo $row2['area_name'];
+                                        echo e($row2['area_name']);
                                         ?>
                                     </div>
                                 </div>

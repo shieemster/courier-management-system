@@ -3,6 +3,7 @@
     <?php include '../server/api.php'; ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<?php echo e(generate_csrf_token()); ?>">
     <title>Dashboard - Royal Express</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">

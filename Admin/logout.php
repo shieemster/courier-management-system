@@ -1,6 +1,8 @@
-<?php 
-session_start();
+<?php
+require_once __DIR__ . '/../includes/bootstrap.php';
+
+$_SESSION = [];
 session_unset();
 session_destroy();
-echo '<script>window.location.href = "login.php"; </script>';
-?>
+header('Location: login.php');
+exit();

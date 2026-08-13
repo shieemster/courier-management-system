@@ -16,6 +16,7 @@
 <script src="https://kit.fontawesome.com/6e8b05f9c5.js" crossorigin="anonymous"></script>
 <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 
+<script src="admin/assets/js/include/csrf.js"></script>
 <script src="admin/assets/js/include/alerts.js"></script>
 <script src="admin/assets/js/include/validation.js"></script>
 <script src="admin/assets/js/include/homejs.js"></script>
@@ -27,7 +28,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
 </script>
